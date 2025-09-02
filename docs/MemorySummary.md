@@ -11,7 +11,7 @@ Snapshot: Add containerized mock and CI contract test
   - Added `dev-start.ps1` to run the mock detached and validate handshake.
   - Wrote `docker-compose.mock.yml` and `tests/test_mcp_contract.py` to automate contract verification.
   - Added `.github/workflows/mcp-contract.yml` to run compose + pytest in CI.
-- outcome: Local pytest contract passed after freeing port 8054; CI workflow file fixed for YAML lint.
+- outcome: Local pytest contract passed after freeing port 8054 (now use ARCHON_MCP_PORT env var); CI workflow file fixed for YAML lint.
 - commands:
   - `docker compose -f docker-compose.mock.yml up --build -d`
   - `pytest -q tests/test_mcp_contract.py::test_mcp_contract`

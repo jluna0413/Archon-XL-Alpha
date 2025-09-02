@@ -4,7 +4,7 @@ import time
 import requests
 
 COMPOSE_FILE = 'docker-compose.mock.yml'
-PORT = os.environ.get('ARCHON_MCP_PORT', '8054')
+PORT = os.environ.get('ARCHON_MCP_PORT', '8054')  # override with ARCHON_MCP_PORT for non-default ports
 
 
 def start_compose():
