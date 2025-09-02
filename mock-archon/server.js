@@ -113,5 +113,6 @@ app.post('/mcp', (req, res) => {
   return res.json({ success: true, received: true, body: req.body });
 });
 
-const port = process.env.PORT || 8054;
-app.listen(port, () => console.log(`mock-archon listening on port ${port}`));
+const port = process.env.PORT || process.env.ARCHON_MCP_PORT || 8054;
+const resolvedUrl = `http://127.0.0.1:${port}/mcp`;
+app.listen(port, () => console.log(`mock-archon listening on port ${port} (MCP URL: ${resolvedUrl})`));

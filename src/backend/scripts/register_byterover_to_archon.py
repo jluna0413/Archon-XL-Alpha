@@ -10,6 +10,13 @@ Usage:
 
 This is intentionally minimal: it performs a JSON-RPC `create_task` or `update_task` call to add a `memories` field on the task. If `--mcp` is omitted, the script will read `ARCHON_MCP_URL` or build the URL from `ARCHON_MCP_PORT`.
 """
+"""
+usage: python register_byterover_to_archon.py --mcp http://127.0.0.1:8054/mcp --task-id <task_id> --memory-id <memory_id>
+
+You can omit --mcp and instead set environment variables:
+    ARCHON_MCP_URL  - full MCP URL (e.g. http://127.0.0.1:8054/mcp)
+    ARCHON_MCP_PORT - port to construct default URL (default: 8054)
+"""
 import argparse
 import json
 import sys

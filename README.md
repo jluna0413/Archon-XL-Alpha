@@ -29,7 +29,10 @@ Use the helper script to attach a Byterover memory ID to an Archon task (calls `
 
 ```powershell
 # Example: attach memory id to mock task (explicit URL)
-python ./src/backend/scripts/register_byterover_to_archon.py --mcp http://127.0.0.1:8054/mcp --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
+python ./src/backend/scripts/register_byterover_to_archon.py --mcp http://127.0.0.1:${ARCHON_MCP_PORT:-8054}/mcp --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
+# or use environment variable instead of --mcp
+# Windows (CMD): set ARCHON_MCP_PORT=8054
+# PowerShell: $env:ARCHON_MCP_PORT = '8054'
 
 # Or rely on environment variables:
 set ARCHON_MCP_PORT=8054
@@ -44,7 +47,7 @@ Use the helper script to attach a Byterover memory ID to an Archon task (calls `
 
 ```powershell
 # Example: attach memory id to mock task
-python ./src/backend/scripts/register_byterover_to_archon.py --mcp http://archon-xl:8054/mcp --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
+python ./src/backend/scripts/register_byterover_to_archon.py --mcp "${ARCHON_MCP_URL:-http://archon-xl:${ARCHON_MCP_PORT:-8054}/mcp}" --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
 
 Local dev helper
 ----------------
@@ -57,6 +60,7 @@ PowerShell:
 ```
 
 To add a hosts entry for `archon-xl` (requires Administrator):
+To add a hosts entry for `archon-xl` (optional, requires Administrator):
 
 ```powershell
 .\dev-start.ps1 -AddHosts

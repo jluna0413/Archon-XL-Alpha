@@ -38,10 +38,10 @@ services:
     build:
       context: ./mock-archon
     ports:
-      - "8054:8054"
-      - "8282:8054"
+      - "${ARCHON_MCP_PORT:-8054}:${ARCHON_MCP_PORT:-8054}"
+      - "8282:${ARCHON_MCP_PORT:-8054}"
     environment:
-      - PORT=8054
+      - PORT=${ARCHON_MCP_PORT:-8054}
 
 volumes:
   pgdata:
