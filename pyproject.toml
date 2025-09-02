@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "archon-xl-alpha"
+version = "0.1.0"
+description = "Archon-XL-Alpha Phase 1 scaffold"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = "E203"
