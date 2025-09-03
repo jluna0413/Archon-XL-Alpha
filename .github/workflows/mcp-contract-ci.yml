@@ -1,0 +1,54 @@
+name: MCP contract CI
+
+on:
+  push:
+    branches: [ main, env-normalize ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install test deps
+        run: pip install --upgrade pip pytest requests
+
+      - name: Build and start mock (docker-compose)
+        run: |
+          docker compose -f docker-compose.mock.yml up --build -d
+
+      - name: Wait for mock to be healthy
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8054/mcp >/dev/null 2>&1; then
+              echo "mock healthy"; exit 0
+            fi
+            sleep 1
+          done
+          echo 'mock did not become healthy' >&2
+          docker compose -f docker-compose.mock.yml logs --no-color || true
+          exit 1
+
+      - name: Run MCP contract tests
+        run: python -m pytest -q tests/test_mcp_contract.py
+
+      - name: Upload fixtures and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-fixtures-and-logs
+          path: |
+            tests/fixtures/**
+            mock-archon/*.log
+
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.mock.yml down
