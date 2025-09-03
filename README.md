@@ -25,4 +25,60 @@ Next steps
 
 - Approve Phase 1 plan in `Phase1_Project_Plan.md` (already created).
 - Provide Archon/Byterover credentials to persist plan and create Archon project/tasks via MCP (optional).
-- I will continue by implementing the plugin scaffolds, a minimal workflow runner, and RAG memory proof-of-concept.
+Use the helper script to attach a Byterover memory ID to an Archon task (calls `update_task` via JSON-RPC). The script will read `ARCHON_MCP_URL` or construct the URL from `ARCHON_MCP_PORT` if `--mcp` is omitted.
+
+```powershell
+# Example: attach memory id to mock task (explicit URL)
+python ./src/backend/scripts/register_byterover_to_archon.py --mcp http://127.0.0.1:${ARCHON_MCP_PORT:-8054}/mcp --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
+# or use environment variable instead of --mcp
+# Windows (CMD): set ARCHON_MCP_PORT=8054
+# PowerShell: $env:ARCHON_MCP_PORT = '8054'
+
+# Or rely on environment variables:
+set ARCHON_MCP_PORT=8054
+python ./src/backend/scripts/register_byterover_to_archon.py --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
+Utilities
+
+- `src/utils/quicksort.js` — in-place iterative quicksort implementation exported as `{ quicksort }`.
+
+Register Byterover memory to Archon tasks
+
+Use the helper script to attach a Byterover memory ID to an Archon task (calls `update_task` via JSON-RPC):
+
+```powershell
+# Example: attach memory id to mock task
+python ./src/backend/scripts/register_byterover_to_archon.py --mcp "${ARCHON_MCP_URL:-http://archon-xl:${ARCHON_MCP_PORT:-8054}/mcp}" --task-id mock-task-1756838776560 --memory-id byterover-memory-12345
+
+Local dev helper
+----------------
+Run `dev-start.ps1` from the repo root to start the local mock-archon, verify the MCP handshake, and run a health_check. Example:
+
+PowerShell:
+
+```powershell
+.\dev-start.ps1
+```
+
+To add a hosts entry for `archon-xl` (requires Administrator):
+To add a hosts entry for `archon-xl` (optional, requires Administrator):
+
+```powershell
+.\dev-start.ps1 -AddHosts
+```
+```
+
+Run unit tests (from workspace root):
+
+```powershell
+pip install -r requirements.txt
+pytest -q src/backend/tests/test_register_byterover.py
+```
+
+Environment variables and CI notes
+---------------------------------
+
+- `ARCHON_MCP_PORT` — canonical MCP port used by local mock and tests (default: `8054`).
+- `ARCHON_MCP_URL` — full MCP URL (overrides `ARCHON_MCP_PORT` if set), e.g. `http://127.0.0.1:8054/mcp`.
+
+CI runner note:
+- The included GitHub Actions workflow runs Docker Compose. GitHub-hosted runners may require additional setup for Docker-in-Docker or use of self-hosted runners with privileged access. If your CI fails when starting the compose stack, prefer a self-hosted runner or adjust the runner permissions to allow Docker-in-Docker.

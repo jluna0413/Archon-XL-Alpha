@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  archon-xl:
+    build:
+      context: ./mock-archon
+    container_name: archon-xl-mock
+    ports:
+      - "${ARCHON_MCP_PORT:-8054}:${ARCHON_MCP_PORT:-8054}"
+    environment:
+      - PORT=${ARCHON_MCP_PORT:-8054}
+    healthcheck:
+      test: ["CMD-SHELL","curl -f http://127.0.0.1:${ARCHON_MCP_PORT:-8054}/mcp || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
